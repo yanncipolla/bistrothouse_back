@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 /**
  * @ORM\Entity(repositoryClass=ProduitRepository::class)
  */
@@ -14,26 +16,31 @@ class Produit
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("categorieProduit:produits")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups ("categorieProduit:produits")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups ("categorieProduit:produits")
      */
     private $description;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups ("categorieProduit:produits")
      */
     private $prix;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups ("categorieProduit:produits")
      */
     private $photo;
 
@@ -45,6 +52,7 @@ class Produit
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups ("categorieProduit:produits")
      */
     private $promo;
 
