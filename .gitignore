@@ -16,3 +16,7 @@
 ###> Fichiers temporaires de la doc ###
 /documentation/~*
 ###< Fichiers temporaires de la doc ###
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

@@ -10,9 +10,23 @@ Mettre à jour les dépendances en saisissant en console :
 
     composer install
     
+Créer des clefs de chiffrement :
+
+    Clef privée :
+        $ openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
+        (La passphrase sera à saisir dans le .env.local)
+    Clef publique :
+        $ openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
+    
 Créer un fichier .env.local et saisir à l'interieur l'URI de la base de donnée
 
+    ### Infos base de données
     DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=8.0.18
+    
+    ### Infos authentification
+    JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
+    JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
+    JWT_PASSPHRASE=PassphraseClefChiffrementPourAuthentification
 
 Créer automatiquement une base de donnée en fonction des parametres saisis dans le .env.local :
 
