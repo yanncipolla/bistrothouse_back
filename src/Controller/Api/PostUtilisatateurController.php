@@ -20,7 +20,7 @@ class PostUtilisatateurController{
 
 
         if ($utilisateur =$utilisateurRepo->findBy(['email' => $data->getEmail()])){
-            return new JsonResponse(['response' => 'Adresse email déjà existante'], self::ERREUR_UTILISATEUR_EXISTANT);
+            return new JsonResponse(['message' => "Inscription impossible : L'adresse email existe déjà."], self::ERREUR_UTILISATEUR_EXISTANT);
         }
 
         $data->setPassword($this->passwordEncoder->encodePassword($data, $data->getPassword()));
