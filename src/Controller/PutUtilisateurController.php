@@ -40,19 +40,11 @@ class PutUtilisateurController extends AbstractController
       $encoders = [new JsonEncoder()];
       $normalizers = [new ObjectNormalizer()];
       $serializer = new Serializer($normalizers, $encoders);
-      $userSaisi = $serializer->deserialize($data, Utilisateur::class, 'json', ['attributes' => ['email', 'password', 'nom', 'prenom', 'complement', 'telephone']]);
+      $userSaisi = $serializer->deserialize($data, Utilisateur::class, 'json', ['attributes' => ['email', 'password', 'nom', 'prenom', 'complement', 'telephone',
+        'numEtRue', 'ville', 'cp']]);
       if ($userSaisi === null || !$userSaisi instanceof Utilisateur) {
         throw new Exception("Saisie incorrecte, probleme lors de la deserialisation");
       }
-      //TODO Utiliser les fonctions avancées de deserialisation afin d'obtenir un objet adresse
-      //      https://www.novaway.fr/blog/tech/comment-utiliser-le-serializer-symfony
-      //      https://afup.org/talks/2545-maitriser-le-composant-serializer-de-symfony
-      $json = json_decode($data, true);
-      $adresseSasie = $serializer->deserialize(json_encode($json['adresse']), Adresse::class, 'json');
-      if ($adresseSasie === null || !$adresseSasie instanceof Adresse) {
-        throw new Exception("Saisie incorrecte, probleme lors de la deserialisation");
-      }
-
 
       $entityManager = $this->getDoctrine()->getManager();
       $user = $this->getUser();
@@ -61,7 +53,7 @@ class PutUtilisateurController extends AbstractController
       }
 
       if ($userSaisi->getEmail() != "" && $userSaisi->getEmail() != $user->getEmail()){
-        if ($utilisateur = $utilisateurRepo->findBy(['email' => $data->getEmail()])){
+        if ($utilisateur = $utilisateurRepo->findBy(['email' => $userSaisi->getEmail()])){
           return new JsonResponse(['message' => "Modification impossible : L'adresse email existe déjà."], self::ERREUR_EMAIL_EXISTANT);
         } else {
           $user->setEmail($userSaisi->getEmail());
@@ -72,16 +64,9 @@ class PutUtilisateurController extends AbstractController
       if ($userSaisi->getNom() != ""){$user->setNom($userSaisi->getNom());}
       if ($userSaisi->getComplement() != ""){$user->setComplement($userSaisi->getComplement());}
       if ($userSaisi->getTelephone() != ""){$user->setTelephone($userSaisi->getTelephone());}
-
-      if ($adresseSasie->getNumero() != "" || $adresseSasie->getRue() != "" || $adresseSasie->getCp() != "" || $adresseSasie->getVille() != ""){
-        $adresse = new Adresse();
-        $adresse->setNumero($adresseSasie->getNumero());
-        $adresse->setRue($adresseSasie->getRue());
-        $adresse->setCp($adresseSasie->getCp());
-        $adresse->setVille($adresseSasie->getVille());
-        $entityManager->persist($adresse);
-        $user->setAdresse($adresse);
-      }
+      if ($userSaisi->getNumEtRue() != ""){$user->setNumEtRue($userSaisi->getNumEtRue());}
+      if ($userSaisi->getVille() != ""){$user->setVille($userSaisi->getVille());}
+      if ($userSaisi->getCp() != ""){$user->setCp($userSaisi->getCp());}
 
       // TODO implementer le check du password avant modification
       // for check password : https://symfonycasts.com/screencast/symfony-security/user-password
