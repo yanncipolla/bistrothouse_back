@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UtilisateurRepository::class)
@@ -32,6 +33,7 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups ("utilisateur:get")
      */
     private $email;
 
@@ -48,21 +50,25 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups ("utilisateur:get")
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups ("utilisateur:get")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups ("utilisateur:get")
      */
     private $telephone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups ("utilisateur:get")
      */
     private $complement;
 
@@ -73,16 +79,19 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups ("utilisateur:get")
      */
     private $numEtRue;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups ("utilisateur:get")
      */
     private $ville;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups ("utilisateur:get")
      */
     private $cp;
 

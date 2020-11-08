@@ -9,6 +9,10 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+use Doctrine\Common\Annotations\AnnotationReader;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+
 use App\Entity\Utilisateur;
 
 class GetUtilisateurController extends AbstractController
@@ -18,21 +22,19 @@ class GetUtilisateurController extends AbstractController
      */
     public function index()
     {
-        // Objets necessaires à la création du serializer JSON
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $encoder = [new JsonEncoder()];
+        $normalizer = [new ObjectNormalizer($classMetadataFactory)];
+        $serializer = new Serializer($normalizer, $encoder);
 
         $user = $this->getUser();
         if ($user === null || !$user instanceof Utilisateur) {
             throw new Exception("Utilisateur non trouvé");
         }
 
-        $user->setPassword("");
+        $jsonContent = $serializer->serialize($user, 'json', ['groups' => ['utilisateur:get']]);
 
-        $jsonContent = $serializer->serialize($user, 'json');
-
-        return new \Symfony\Component\HttpFoundation\Response($jsonContent);
+      return new \Symfony\Component\HttpFoundation\Response($jsonContent);
 
     }
 }
