@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Adresse;
 use App\Entity\Utilisateur;
@@ -21,7 +22,9 @@ class PutUtilisateurController extends AbstractController
   const ERREUR_EMAIL_EXISTANT = 409;
   const ERREUR_MDP_INCORRECT = 422;
 
-  public function __construct(UserPasswordEncoderInterface $passwordEncoder){
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder){
     $this->passwordEncoder = $passwordEncoder;
   }
 

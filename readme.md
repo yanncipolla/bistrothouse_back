@@ -35,3 +35,12 @@ Créer automatiquement une base de donnée en fonction des parametres saisis dan
 Mettre à jour les tables :
 
     php bin/console doctrine:migrations:migrate
+    
+Paramétrer l'envoi de mail pour la prise de commande dans le fichier .env.local.
+
+    Ajouter le compte google qui servira à envoyer les mails :
+    (Les caracteres spéciaux (exemple @) doivent etre encodés en URL : https://www.urlencoder.org)
+        MAILER_DSN=gmail+smtp://USERNAME:PASSWORD@default (adresse servant à envoyer un mail)
+        
+    Ajouter l'adresse email qui receptionnera le détail de chaque commande validée :
+        MAIL_COMMANDE="mail@domaine.com"

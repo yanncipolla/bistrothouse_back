@@ -18,6 +18,19 @@ class CommandeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Commande::class);
     }
+//
+//    public function calculerTotalCommande(){
+//        $em = $this->getEntityManager();
+//
+//        $query = $em->createQuery(
+//            'SELECT p, c
+//        FROM App\Entity\Product p
+//        INNER JOIN p.category c
+//        WHERE p.id = :id'
+//        )->setParameter('id', $productId);
+//
+//        return $query->getOneOrNullResult();
+//    }
 
     // /**
     //  * @return Commande[] Returns an array of Commande objects
