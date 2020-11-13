@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -34,7 +35,7 @@ class GetUtilisateurController extends AbstractController
 
         $jsonContent = $serializer->serialize($user, 'json', ['groups' => ['utilisateur:get']]);
 
-      return new \Symfony\Component\HttpFoundation\Response($jsonContent);
+      return new Response($jsonContent);
 
     }
 }

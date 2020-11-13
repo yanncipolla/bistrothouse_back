@@ -9,10 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UtilisateurRepository::class)
- *  * @ApiResource(
+ * @ApiResource(
  *     itemOperations={},
  *     collectionOperations={
  *      "post"={
@@ -21,6 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *       }
  *     }
  * )
+ * @UniqueEntity("email", message="Inscription impossible : L'adresse email existe déjà.")
  */
 class Utilisateur implements UserInterface
 {
