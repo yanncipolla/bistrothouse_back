@@ -7,9 +7,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UtilisateurRepository::class)
+ * @ApiResource(
+ *     itemOperations={},
+ *     collectionOperations={
+ *      "post"={
+ *          "controller"=App\Controller\Api\PostUtilisatateurController::class,
+ *          "output"=false
+ *       }
+ *     }
+ * )
+ * @UniqueEntity("email", message="Inscription impossible : L'adresse email existe déjà.")
  */
 class Utilisateur implements UserInterface
 {
@@ -22,13 +35,14 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups ("utilisateur:get")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private $roles = ['ROLE_USER'];
 
     /**
      * @var string The hashed password
@@ -38,34 +52,60 @@ class Utilisateur implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups ("utilisateur:get")
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups ("utilisateur:get")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups ("utilisateur:get")
      */
     private $telephone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups ("utilisateur:get")
      */
     private $complement;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Adresse::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $adresse;
 
     /**
      * @ORM\OneToMany(targetEntity=Commande::class, mappedBy="utilisateur", orphanRemoval=true)
      */
     private $commandes;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups ("utilisateur:get")
+     */
+    private $numEtRue;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups ("utilisateur:get")
+     */
+    private $ville;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups ("utilisateur:get")
+     */
+    private $cp;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $longitude;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $latitude;
 
     public function __construct()
     {
@@ -198,18 +238,6 @@ class Utilisateur implements UserInterface
         return $this;
     }
 
-    public function getAdresse(): ?Adresse
-    {
-        return $this->adresse;
-    }
-
-    public function setAdresse(?Adresse $adresse): self
-    {
-        $this->adresse = $adresse;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Commande[]
      */
@@ -237,6 +265,66 @@ class Utilisateur implements UserInterface
                 $commande->setUtilisateur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNumEtRue(): ?string
+    {
+        return $this->numEtRue;
+    }
+
+    public function setNumEtRue(string $numEtRue): self
+    {
+        $this->numEtRue = $numEtRue;
+
+        return $this;
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->ville;
+    }
+
+    public function setVille(string $ville): self
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function getCp(): ?string
+    {
+        return $this->cp;
+    }
+
+    public function setCp(string $cp): self
+    {
+        $this->cp = $cp;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?string
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(string $longitude): self
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function getLatitude(): ?string
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(?string $latitude): self
+    {
+        $this->latitude = $latitude;
 
         return $this;
     }

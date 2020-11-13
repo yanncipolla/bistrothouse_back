@@ -22,49 +22,28 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         //************************************************************************************************************
-        //************************************************ Adresse ***************************************
-        //************************************************************************************************************
-        $tabAdresse = array();
-
-        array_push($tabAdresse,
-            array('4', 'Rue Ravier', 'Lyon', '69007')
-        );
-        $tabObjetAdresse = array();
-        for ($i=0; $i < count($tabAdresse); $i++){
-            $tabObjetAdresse[$i] = new Adresse();
-            $tabObjetAdresse[$i]->setNumero($tabAdresse[$i][0]);
-            $tabObjetAdresse[$i]->setRue($tabAdresse[$i][1]);
-            $tabObjetAdresse[$i]->setVille($tabAdresse[$i][2]);
-            $tabObjetAdresse[$i]->setCp($tabAdresse[$i][3]);
-
-            $manager->persist($tabObjetAdresse[$i]);
-        }
-        $manager->flush();
-
-
-        //************************************************************************************************************
         //************************************************ User ***************************************
         //************************************************************************************************************
         $tabUser = array();
 
-        $roleUtilisateur[]= 'ROLE_USER';
-        array_push($roleUtilisateur,'ROLE_ADMIN');
+        $roleUtilisateur= ['ROLE_USER', 'ROLE_ADMIN'];
         array_push($tabUser,
-            array('user4admin@bistrot-house.tk', $roleUtilisateur, 'password4admin', 'user4admin', 'user4admin', 'telephone')
+            array('user4admin@bistrot-house.tk', $roleUtilisateur, 'password4admin', 'user4admin', 'user4admin', 'telephone', '4 rue Ravier', 'Lyon', '69007')
         );
         $tabObjetUser = array();
         for ($i=0; $i < count($tabUser); $i++){
-            $tabObjetUser[$i] = new Utilisateur();
-            $tabObjetUser[$i]->setEmail($tabUser[$i][0]);
-            $tabObjetUser[$i]->setRoles($tabUser[$i][1]);
-            $tabObjetUser[$i]->setPassword($this->passwordEncoder->encodePassword($tabObjetUser[$i],$tabUser[$i][2]));
-            $tabObjetUser[$i]->setPrenom($tabUser[$i][3]);
-            $tabObjetUser[$i]->setNom($tabUser[$i][4]);
-            $tabObjetUser[$i]->setTelephone($tabUser[$i][5]);
+          $tabObjetUser[$i] = new Utilisateur();
+          $tabObjetUser[$i]->setEmail($tabUser[$i][0]);
+          $tabObjetUser[$i]->setRoles($tabUser[$i][1]);
+          $tabObjetUser[$i]->setPassword($this->passwordEncoder->encodePassword($tabObjetUser[$i],$tabUser[$i][2]));
+          $tabObjetUser[$i]->setPrenom($tabUser[$i][3]);
+          $tabObjetUser[$i]->setNom($tabUser[$i][4]);
+          $tabObjetUser[$i]->setTelephone($tabUser[$i][5]);
+          $tabObjetUser[$i]->setNumEtRue($tabUser[$i][6]);
+          $tabObjetUser[$i]->setVille($tabUser[$i][7]);
+          $tabObjetUser[$i]->setCp($tabUser[$i][8]);
 
-            $tabObjetUser[$i]->setAdresse($tabObjetAdresse[0]);
-
-            $manager->persist($tabObjetUser[$i]);
+          $manager->persist($tabObjetUser[$i]);
         }
         $manager->flush();
 
