@@ -70,13 +70,11 @@ class PostCommandeController extends AbstractController
         $email = (new Email())
             ->from('bistrothouse@gmail.com')
             ->to($_ENV['MAIL_COMMANDE']);
-
         if ($commande->getEmporter()){
             $livraison = "a emporter";
         } else {
             $livraison = "a livrer";
         }
-
         $email->subject("Nouvelle Commande " . $livraison);
         $email->html(
             '<p>Vous avez recu une nouvelle commande ' . $livraison . ' : ' . $commande->getId() . '</p>' .
@@ -96,8 +94,30 @@ class PostCommandeController extends AbstractController
             '<p>Prix total : ' . $prixTotal . '€</p>' .
             '<p>Fin de commande</p>'
         );
-
         $mailer->send($email);
+
+        $emailClient = (new Email())
+            ->from('bistrothouse@gmail.com')
+            ->to($user->getEmail());
+        if ($commande->getEmporter()){
+            $livraison = "a emporter";
+        } else {
+            $livraison = "a livrer";
+        }
+        $emailClient->subject("Votre commande " . $livraison . " a été validée et est en cours de préparation.");
+        $emailClient->html(
+            '<p>Bonjour ' . $user->getPrenom() . ',</p>' .
+            '<br>' .
+            '<p>Nous avons bien recu votre commande et celle-ci est en cours de préparation. Vous trouverez son détail ci-dessous.</p>' .
+            '<p>Liste des produits commandés : </p>' .
+            $listeProduitsHTML.
+            '<p>Commentaire commande : ' . $commande->getCommentaire() . '</p>' .
+            '<p>Prix total : ' . $prixTotal . '€</p>' .
+            '<p>Merci pour votre commande et à très bientot dans notre restaurant.</p>' .
+            '<br>' .
+            '<p>L\'équipe Bistrot-House</p>'
+        );
+        $mailer->send($emailClient);
 
         return new JsonResponse(['message' => 'Commande enregistree']);
     }
